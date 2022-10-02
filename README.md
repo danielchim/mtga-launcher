@@ -1,6 +1,16 @@
-# mtgalauncher
+# MTGA-Launcher
 
-A new Flutter project.
+Another emutarkov launcher for MTGA project. Support windows, macOS* and linux.
+
+##### *macOS will not have to complete feature of the launcher compared to other platforms.
+
+## Features
+
+* Account management
+
+* Mod management
+
+* Profile editor
 
 ## Getting Started
 

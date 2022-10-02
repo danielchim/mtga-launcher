@@ -13,7 +13,16 @@ import 'screens/settings.dart';
 
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
+}
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -65,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
       launchText = "The game is running!";
     });
     log("Game running: $_isRunning");
-    // final exitCode = ShellExecute(NULL, TEXT("open"), TEXT(executable), TEXT(args), nullptr, SW_SHOWNORMAL);
+    final exitCode = ShellExecute(NULL, TEXT("open"), TEXT(executable), TEXT(args), nullptr, SW_SHOWNORMAL);
     _isRunning = !_isRunning;
     setState(() {
       launchText = "Press the button to launch the game";
@@ -74,7 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _login() async {
-    // auth("demo","demo");
+    var demo = await auth(myController.text,myController.text);
+    log(demo.body);
     log("Game running: ${myController.text}");
   }
 
@@ -159,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
               launchText,
             ),
             ElevatedButton(
-              onPressed: _startApp,
+              onPressed: Platform.isWindows || Platform.isLinux? _startApp : null,
               child: const Text("Play!"),
             )
           ],
