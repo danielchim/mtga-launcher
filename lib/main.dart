@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sidebarx/sidebarx.dart';
 import 'dart:io';
 import 'dart:developer';
 import 'dart:convert';
@@ -11,10 +13,9 @@ import 'screens/home.dart';
 import 'screens/settings.dart';
 
 
-
 void main() {
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyHttpOverrides extends HttpOverrides{
@@ -26,22 +27,38 @@ class MyHttpOverrides extends HttpOverrides{
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    MaterialApp.router(
+      routerConfig: _router,
+    );
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'MTGA launcher'),
-      routes: {
-        '/settings': (context) => SettingScreen(),
-      },
     );
   }
+  final GoRouter _router = GoRouter(
+      routes: <GoRoute>[
+        GoRoute(
+          path: '/',
+          builder: (BuildContext context, GoRouterState state) {
+            return HomeScreen(title: 'demo');
+          },
+        ),
+        GoRoute(
+          path: '/settings',
+          builder: (BuildContext context, GoRouterState state) {
+            return const SettingsScreen(title: 'demo');
+          },
+        ),
+      ]
+  );
 }
 
 class MyHomePage extends StatefulWidget {
@@ -66,112 +83,17 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _startApp() async {
-    String executable = 'C:\\Games\\EFT-Modded\\EscapeFromTarkov.exe';
-    String args = '-bC5vLmcuaS5u={"email":"demo","password":"demo","toggle":"true","timestamp":"0"} -token=81a0cf770000000000000000 -config={"BackendUrl":"$backendUrl","Version":"live"}';
-    _isRunning = !_isRunning;
-    setState(() {
-      launchText = "The game is running!";
-    });
-    log("Game running: $_isRunning");
-    final exitCode = ShellExecute(NULL, TEXT("open"), TEXT(executable), TEXT(args), nullptr, SW_SHOWNORMAL);
-    _isRunning = !_isRunning;
-    setState(() {
-      launchText = "Press the button to launch the game";
-    });
-    log("Game running: $_isRunning");
-  }
-
-  void _login() async {
-    var demo = await auth(myController.text,myController.text);
-    log(demo.body);
-    log("Game running: ${myController.text}");
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Messages'),
-              onTap: (){
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>  SettingScreen(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-            ),
-          ],
-        ),
-      ),
       body: Center(
-        child: Column(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Login name',
-              ),
-              controller: myController,
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Password',
-              ),
-              controller: myController,
-
-            ),
-            Text(
-              launchText,
-            ),
-            ElevatedButton(
-              onPressed: _login,
-              child: const Text("Login!"),
-            ),
-            const TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Server IP',
-              ),
-            ),
-            Text(
-              launchText,
-            ),
-            ElevatedButton(
-              onPressed: Platform.isWindows || Platform.isLinux? _startApp : null,
-              child: const Text("Play!"),
-            )
+          children: const <Widget>[
+            Text('hi')
           ],
         ),
       ),

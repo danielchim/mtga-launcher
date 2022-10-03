@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-
-
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key, required this.title}) : super(key: key);
+  final String title;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Center(
+        child: TextButton(
+          onPressed: () {},
+          child: const Text('Next'),
+        ),
+      ),
     );
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
   }
 }
