@@ -1,8 +1,8 @@
 # MTGA-Launcher
 
-Another emutarkov launcher for MTGA project. Support windows, macOS* and linux.
+Another emutarkov launcher for MTGA project. Support windows, macOS* and linux*.
 
-##### *macOS will not have to complete feature of the launcher compared to other platforms.
+##### *Some features might not available on macOS or linux.
 
 ## Features
 
