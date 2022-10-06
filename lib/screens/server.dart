@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../components/register.dart';
 import '../components/serverlist.dart';
@@ -19,9 +21,49 @@ class ServerSelectionScreen extends StatefulWidget {
 class ServerSelectionScreenState extends State<ServerSelectionScreen> {
   bool showRegisterDialog = false;
   int selectedVal = 0;
+  int count = 0;
+
+  @override
+  initState() {
+    super.initState();
+    var demo = _localPath;
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
+
+  Future<File> writeCounter(int counter) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString('$counter');
+  }
+
+  Future<int> readCounter() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      final contents = await file.readAsString();
+
+      return int.parse(contents);
+    } catch (e) {
+      // If encountering an error, return 0
+      return 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('MTGA Lanucher'),
@@ -33,6 +75,9 @@ class ServerSelectionScreenState extends State<ServerSelectionScreen> {
             const Text('Select server'),
             DropdownButtonExample(
               onCountChanged: (int val) {
+                if(val == 1) {
+                  newServerDialog(context);
+                }
                 setState(() => selectedVal = val);
                 log(selectedVal.toString());
               },
@@ -126,14 +171,7 @@ class ServerSelectionScreenState extends State<ServerSelectionScreen> {
             obscureText: false,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Username',
-            ),
-          ),
-          TextField(
-            obscureText: true,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Password',
+              labelText: 'Server location',
             ),
           ),
         ],
@@ -144,7 +182,10 @@ class ServerSelectionScreenState extends State<ServerSelectionScreen> {
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
+          onPressed: () => {
+            setState(() => count++),
+            Navigator.pop(context, 'OK')
+          },
           child: const Text('OK'),
         ),
       ],

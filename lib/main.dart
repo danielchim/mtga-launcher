@@ -1,5 +1,6 @@
+import 'dart:developer';
 import 'dart:io';
-
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mtgalauncher/screens/home.dart';
@@ -12,7 +13,14 @@ GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _shellNavigatorKey =
 GlobalKey<NavigatorState>(debugLabel: 'shell');
 
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+}
+
 void main() {
+  // log(_localPath.toString());
   runApp(MyApp());
 }
 
@@ -25,10 +33,15 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-/// An example demonstrating how to use [ShellRoute]
 class MyApp extends StatelessWidget {
   /// Creates a [ShellRouteExampleApp]
   MyApp({Key? key}) : super(key: key);
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
 
   final GoRouter _router = GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -153,8 +166,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'MTGA Launcher',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -166,6 +180,7 @@ class MyApp extends StatelessWidget {
 /// Builds the "shell" for the app by building a Scaffold with a
 /// BottomNavigationBar, where [child] is placed in the body of the Scaffold.
 class ScaffoldWithNavBar extends StatelessWidget {
+
   /// Constructs an [ScaffoldWithNavBar].
   const ScaffoldWithNavBar({
     required this.child,

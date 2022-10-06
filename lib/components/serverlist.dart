@@ -33,7 +33,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
       items: list.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(value),
+          child: Text(value)
         );
       }).toList(),
     );
