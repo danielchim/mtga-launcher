@@ -7,17 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:win32/win32.dart';
 
-
 /// The first screen in the bottom navigation bar.
 class HomeScreen extends StatelessWidget {
   /// Constructs a [ScreenA] widget.
   const HomeScreen({Key? key}) : super(key: key);
 
-  // This version is bugged by Process.start()
+  // Launches the game executable on windows and Linux
   _launchApp() async {
-    String winExecutable = 'C:\\Games\\EFT-modded\\EscapeFromTarkov.exe -bC5vLmcuaS5u={"email":"demo","password":"demo","toggle":"true","timestamp":"0"} -token=81a0cf770000000000000000 -config={"BackendUrl":"https://127.0.0.1","Version":"live"}';
+    String winExecutable =
+        'C:\\Games\\EFT-modded\\EscapeFromTarkov.exe -bC5vLmcuaS5u={"email":"demo","password":"demo","toggle":"true","timestamp":"0"} -token=81a0cf770000000000000000 -config={"BackendUrl":"https://127.0.0.1","Version":"live"}';
     String linuxExecutable = 'TOBEIMPLEMENTED'; // To be implemented.
-    final process = await Process.start(Platform.isWindows?winExecutable:linuxExecutable, [], runInShell: false);// this should only be either windows or linux.
+    final process = await Process.start(
+        Platform.isWindows ? winExecutable : linuxExecutable, [],
+        runInShell: false); // this should only be either windows or linux.
   }
 
   @override

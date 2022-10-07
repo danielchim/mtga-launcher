@@ -196,7 +196,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
     return Scaffold(
       body: child,
       appBar: AppBar(
-        title: Text('a Lanucher'),
+        title: Text('MTGA Lanucher'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
