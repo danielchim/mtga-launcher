@@ -15,17 +15,9 @@ class HomeScreen extends StatelessWidget {
 
   // This version is bugged by Process.start()
   _launchApp() async {
-    String executable = 'C:\\Games\\EFT-modded\\EscapeFromTarkov.exe';
-    const String backendUrl = 'https://127.0.0.1';
-    final arguments = <String>['-bC5vLmcuaS5u={"email":"demo","password":"demo","toggle":"true","timestamp":"0"}',"-token=81a0cf770000000000000000","-config={BackendUrl:$backendUrl,Version:live}"];
-    final process = await Process.start(executable, arguments, runInShell: true);
-  }
-
-  _launchAppForWindows() {
-    const String backendUrl = 'https://127.0.0.1';
-    String executable = 'C:\\Games\\EFT-modded\\EscapeFromTarkov.exe';
-    String args = '-bC5vLmcuaS5u={"email":"demo","password":"demo","toggle":"true","timestamp":"0"} -token=81a0cf770000000000000000 -config={"BackendUrl":"$backendUrl","Version":"live"}';
-    final exitCode = ShellExecute(NULL, TEXT("open"), TEXT(executable), TEXT(args), nullptr, SW_SHOWNORMAL);
+    String winExecutable = 'C:\\Games\\EFT-modded\\EscapeFromTarkov.exe -bC5vLmcuaS5u={"email":"demo","password":"demo","toggle":"true","timestamp":"0"} -token=81a0cf770000000000000000 -config={"BackendUrl":"https://127.0.0.1","Version":"live"}';
+    String linuxExecutable = 'TOBEIMPLEMENTED'; // To be implemented.
+    final process = await Process.start(Platform.isWindows?winExecutable:linuxExecutable, [], runInShell: false);// this should only be either windows or linux.
   }
 
   @override
@@ -42,6 +34,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: const Text('View A details'),
             ),
+            // This button will disable in the future if it's not supported.
             ElevatedButton(
               onPressed: () {
                 log('Game starting!');
