@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mtgalauncher/screens/home.dart';
@@ -13,15 +14,15 @@ GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _shellNavigatorKey =
 GlobalKey<NavigatorState>(debugLabel: 'shell');
 
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
+enum Actions { Increment }
 
-  return directory.path;
+int counterReducer(int state, dynamic action) {
+  return action == Actions.Increment ? state + 1 : state;
 }
 
 void main() {
-  // log(_localPath.toString());
-  runApp(MyApp());
+  final store = Store<int>(counterReducer, initialState: 22);
+  runApp(MyApp(store: store));
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -35,14 +36,9 @@ class MyHttpOverrides extends HttpOverrides {
 
 class MyApp extends StatelessWidget {
   /// Creates a [ShellRouteExampleApp]
-  MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key, required this.store}) : super(key: key);
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
-  }
-
+  final Store<int> store;
   final GoRouter _router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/login',
@@ -63,6 +59,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
       ),
+
       /// Application shell
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
@@ -103,6 +100,7 @@ class MyApp extends StatelessWidget {
               ),
             ],
           ),
+
           /// The first screen to display in the bottom navigation bar.
           GoRoute(
             path: '/a',
@@ -129,6 +127,7 @@ class MyApp extends StatelessWidget {
               return const ProfileScreen();
             },
             routes: <RouteBase>[
+
               /// Same as "/a/details", but displayed on the root Navigator by
               /// specifying [parentNavigatorKey]. This will cover both screen B
               /// and the application shell.
@@ -166,13 +165,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return MaterialApp.router(
-      title: 'MTGA Launcher',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routerConfig: _router,
+    return StoreProvider<int>(
+        store:store,
+        child: MaterialApp.router(
+          title: 'MTGA Launcher',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          routerConfig: _router,
+        )
     );
   }
 }
@@ -267,11 +268,11 @@ class DetailsScreen extends StatelessWidget {
         title: const Text('Details Screen'),
       ),
       body: Center(
-        child:(
-            ElevatedButton(
-              onPressed: ()=> context.go('/a'), child: Text('hi'),
-            )
-        )
+          child: (
+              ElevatedButton(
+                onPressed: () => context.go('/a'), child: Text('hi'),
+              )
+          )
       ),
     );
   }
