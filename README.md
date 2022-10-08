@@ -12,6 +12,11 @@ Another emutarkov launcher for MTGA project. Support windows, macOS* and linux*.
 
 * Profile editor
 
+## Known issues
+
+* The app won't report for incorrect EscapeFromTarkov.exe path as it's limited by an issue in one of this app's dependencies.
+* There are no minimum resize size right now. Will be fixed within further investigation.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

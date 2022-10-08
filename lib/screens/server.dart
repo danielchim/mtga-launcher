@@ -26,11 +26,12 @@ class ServerSelectionScreenState extends State<ServerSelectionScreen> {
   @override
   initState() {
     super.initState();
-    var demo = _localPath;
+    writeCounter(0);
+    log('written!');
   }
 
   Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
+    final directory = await getApplicationSupportDirectory ();
 
     return directory.path;
   }
